@@ -1,15 +1,14 @@
 package Question2;
 
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class LuxuryCruiseCentre {
 
-    private Map<String, Set<CruiseShip>> portMap;
+    private Map<String,Set<CruiseShip>> portMap;
 
     public LuxuryCruiseCentre(){
+        portMap = new ConcurrentHashMap<>();
 
     }
 
@@ -18,6 +17,15 @@ public class LuxuryCruiseCentre {
      * (care taken when the departure port already exists in the portMap)
      * */
     public boolean add(CruiseShip ship){
+        if (portMap.containsKey(ship.getDepartPort())){
+
+        }
+        else {
+            Set set = new HashSet();
+            set.add(ship);
+            portMap.put(ship.getDepartPort(),set);
+            return true;
+        }
 
         return false;
     }
