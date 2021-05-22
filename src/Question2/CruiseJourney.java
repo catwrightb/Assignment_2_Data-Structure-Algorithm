@@ -1,6 +1,8 @@
 package Question2;
 
 import java.util.Calendar;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 /* CruiseJourney  represents a journey
@@ -14,7 +16,7 @@ public class CruiseJourney {
     * default constructor creating a journey with no initial trips
     */
     public CruiseJourney(){
-
+        shipList = new LinkedList<>();
     }
 
     /**
@@ -22,7 +24,11 @@ public class CruiseJourney {
      * objects to the underlying data structure
      */
     public CruiseJourney(List<CruiseShip> list){
-
+        this();
+        for (Iterator<CruiseShip> iterator = list.iterator(); iterator.hasNext();){
+            CruiseShip next = iterator.next();
+            this.addCruise(next);
+        }
     }
 
     /**
@@ -47,8 +53,21 @@ public class CruiseJourney {
      *
      */
     public boolean addCruise(CruiseShip ship){
+        //empty
+        if (getEndPort() == null){
+            shipList.add(ship);
+            return true;
+        }
+        else if (getEndPort() == ship.getDepartPort()
+        && getEndDate().equals(ship.getDepartDate())
+        && !containsPort(ship.getArrivalPort())) {
+            shipList.add(ship);
+            return true;
+        }
+        else {
+            return false;
+        }
 
-        return false;
     }
 
 
@@ -57,6 +76,11 @@ public class CruiseJourney {
      * from the current journey (if any)
      */
     public boolean removeLastTrip(){
+        if (!shipList.isEmpty()){
+            int last = shipList.size()-1;
+            shipList.remove(last);
+            return true;
+        }
 
         return false;
     }
@@ -67,6 +91,15 @@ public class CruiseJourney {
      *
      */
     public boolean containsPort(String port){
+        if (!shipList.isEmpty()){
+            for (Iterator<CruiseShip> iterator = shipList.iterator(); iterator.hasNext();){
+                CruiseShip next = iterator.next();
+
+                if (port.equals(next.getDepartPort())){
+                    return true;
+                }
+            }
+        }
 
         return false;
     }
@@ -76,6 +109,9 @@ public class CruiseJourney {
      * (start port and date are the first CruiseShip’s departure values)
      */
     public String getStartPort(){
+        if (!shipList.isEmpty()){
+            return shipList.get(0).getDepartPort();
+        }
 
         return null;
     }
@@ -85,6 +121,10 @@ public class CruiseJourney {
      * (end port and date are the last CruiseShip’s arrival values)
      */
     public String getEndPort(){
+        if (!shipList.isEmpty()){
+            int end = shipList.size()-1;
+            return shipList.get(end).getArrivalPort();
+        }
 
         return null;
     }
@@ -94,6 +134,9 @@ public class CruiseJourney {
      * (start port and date are the first CruiseShip’s departure values)
      */
     public Calendar getStartDate(){
+        if (!shipList.isEmpty()){
+            return shipList.get(0).getDepartDate();
+        }
 
         return null;
     }
@@ -103,6 +146,10 @@ public class CruiseJourney {
      * (end port and date are the last CruiseShip’s arrival values)
      */
     public Calendar getEndDate(){
+        if (!shipList.isEmpty()){
+            int end = shipList.size()-1;
+            return shipList.get(end).getArrivalDate();
+        }
 
         return null;
     }
@@ -113,7 +160,7 @@ public class CruiseJourney {
      */
     public CruiseJourney cloneJourney(){
 
-        return null;
+        return new CruiseJourney(shipList);
     }
 
     /**
@@ -121,8 +168,18 @@ public class CruiseJourney {
      * returns the number of CruiseShips which comprise the journey
      */
     public int getNumberOfTrips(){
+        int trips=0;
 
-        return 0;
+        if (!shipList.isEmpty()){
+
+            for (Iterator<CruiseShip> iterator = shipList.iterator(); iterator.hasNext();){
+                CruiseShip next = iterator.next();
+                trips++;
+            }
+            return trips;
+        }
+
+        return trips;
     }
 
     /**
@@ -130,8 +187,18 @@ public class CruiseJourney {
      * in this journey
      */
     public double getTotalCost(){
+        double cost = 0.0;
 
-        return 0;
+        if (!shipList.isEmpty()){
+
+            for (Iterator<CruiseShip> iterator = shipList.iterator(); iterator.hasNext();){
+                CruiseShip next = iterator.next();
+                cost =+ next.getCost();
+            }
+            return cost;
+        }
+
+        return cost;
     }
 
 
@@ -142,8 +209,16 @@ public class CruiseJourney {
      * */
     @Override
     public String toString() {
-        return "CruiseJourney{" +
-                "shipList=" + shipList +
-                '}';
+        String stringBuilder = "Total Cost: $" + getTotalCost() +"!!!";
+
+        for (Iterator<CruiseShip> iterator = shipList.iterator(); iterator.hasNext();){
+            CruiseShip next = iterator.next();
+            stringBuilder += "\n"+ next.getBoatName() + ": "+
+                    "LEAVING " + next.getDepartPort() + " " + next.getDepartDate() +
+                    " and ARRIVING " + next.getArrivalPort() + " " + next.getArrivalDate() +
+                    " $" + next.getCost();
+        }
+
+        return stringBuilder;
     }
 }

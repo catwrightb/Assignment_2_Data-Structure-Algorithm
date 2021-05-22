@@ -18,7 +18,7 @@ public class LuxuryCruiseCentre {
      * */
     public boolean add(CruiseShip ship){
         if (portMap.containsKey(ship.getDepartPort())){
-
+            return portMap.get(ship.getDepartPort()).add(ship);
         }
         else {
             Set set = new HashSet();
@@ -27,19 +27,26 @@ public class LuxuryCruiseCentre {
             return true;
         }
 
-        return false;
     }
 
+    //"Auckland", new GregorianCalendar(2020, Calendar.JUNE,1), "Vanuatu"
     /**
      *  getPossibleJourneys method is used to return list of all
      *  the uniquely possible routes from the start port and date
      *  to the end port. it does this by calling the findPaths method
      *
      * */
-    public List<CruiseShipJourney> getPossibleJourney(String startPoint
-    Calendar startDate, String endPoint){
+    public List<CruiseJourney> getPossibleJourneys(String startPoint, GregorianCalendar startDate, String endPoint){
 
-        return null;
+        //list of cruises
+        List<CruiseJourney> cruiseJourneyList = new ArrayList<>();
+        //cruise object to pass to findPaths
+        CruiseJourney cruiseJourney = new CruiseJourney();
+
+        //recursive call to find paths
+        findPaths(startPoint, startDate, endPoint, cruiseJourney, cruiseJourneyList);
+
+        return cruiseJourneyList;
     }
 
     /**
@@ -51,9 +58,35 @@ public class LuxuryCruiseCentre {
      *  target port is found it will “clone” the current journey and add
      *  it to the List of CruiseJourney values found.
      * */
-    private void findPaths(String departPort, Calendar departDate,
-                           String endPoint, CruiseJourney currentJourney
+    private void findPaths(String departPort, Calendar departDate, String endPoint, CruiseJourney currentJourney,
                            List<CruiseJourney>journeyList){
+        if (departPort.equals(endPoint)){
+            CruiseJourney clone = currentJourney.cloneJourney();
+            journeyList.add(clone);
+            return;
+        }
+        else {
+            Set set = portMap.get(departPort);
+            CruiseShip next;
+
+            for (Iterator<CruiseShip> iterator = set.iterator(); iterator.hasNext();){
+                next = iterator.next();
+
+                if (next.getDepartDate().equals(departDate)
+                && next.getArrivalDate().equals(departDate)){
+
+                    if (currentJourney.addCruise(next)){
+                        findPaths(next.getArrivalPort(), next.getArrivalDate(),
+                                endPoint, currentJourney, journeyList);{
+                                    currentJourney.removeLastTrip();
+                        }
+                    }
+                }
+            }
+
+
+        }
+
 
     }
 
