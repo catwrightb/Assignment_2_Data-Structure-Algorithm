@@ -69,25 +69,25 @@ public class LuxuryCruiseCentre {
             Set set = portMap.get(departPort);
             CruiseShip next;
 
-            for (Iterator<CruiseShip> iterator = set.iterator(); iterator.hasNext();){
-                next = iterator.next();
+            for (Iterator iterator = set.iterator(); iterator.hasNext();){
+                next = (CruiseShip) iterator.next();
 
-                if (next.getDepartDate().equals(departDate)
-                && next.getArrivalDate().equals(departDate)){
+                if (next.getDepartDate().compareTo(departDate) >= 0 &&
+                 next.getArrivalDate().compareTo(departDate) <= 0){
 
                     if (currentJourney.addCruise(next)){
-                        findPaths(next.getArrivalPort(), next.getArrivalDate(),
-                                endPoint, currentJourney, journeyList);{
-                                    currentJourney.removeLastTrip();
+                        findPaths(next.getArrivalPort(), next.getArrivalDate(), endPoint, currentJourney, journeyList);
+                        currentJourney.removeLastTrip();
                         }
                     }
                 }
             }
 
 
+
         }
 
 
-    }
+
 
 }
