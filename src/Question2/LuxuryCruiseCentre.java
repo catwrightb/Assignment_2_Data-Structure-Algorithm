@@ -60,10 +60,10 @@ public class LuxuryCruiseCentre {
      * */
     private void findPaths(String departPort, Calendar departDate, String endPoint, CruiseJourney currentJourney,
                            List<CruiseJourney>journeyList){
+
         if (departPort.equals(endPoint)){
             CruiseJourney clone = currentJourney.cloneJourney();
             journeyList.add(clone);
-            return;
         }
         else {
             Set set = portMap.get(departPort);
@@ -72,22 +72,19 @@ public class LuxuryCruiseCentre {
             for (Iterator iterator = set.iterator(); iterator.hasNext();){
                 next = (CruiseShip) iterator.next();
 
-                if (next.getDepartDate().compareTo(departDate) >= 0 &&
-                 next.getArrivalDate().compareTo(departDate) <= 0){
-
-                    if (currentJourney.addCruise(next)){
+                if (next.getDepartDate().after(departDate) || next.getDepartDate().equals(departDate)){
+                    if (currentJourney.addCruise(next))
+                    {
                         findPaths(next.getArrivalPort(), next.getArrivalDate(), endPoint, currentJourney, journeyList);
                         currentJourney.removeLastTrip();
-                        }
                     }
+
                 }
+                }
+
+
             }
 
-
-
         }
-
-
-
 
 }

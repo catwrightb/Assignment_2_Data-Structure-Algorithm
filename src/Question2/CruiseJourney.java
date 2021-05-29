@@ -1,5 +1,6 @@
 package Question2;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -11,6 +12,7 @@ import java.util.List;
 
 public class CruiseJourney {
     private List<CruiseShip> shipList;
+    private final SimpleDateFormat fmt = new SimpleDateFormat("dd-MMM-yyyy");
 
    /**
     * default constructor creating a journey with no initial trips
@@ -58,16 +60,14 @@ public class CruiseJourney {
             shipList.add(ship);
             return true;
         }
-        else if (getEndPort() == ship.getDepartPort()
-        && getEndDate().equals(ship.getDepartDate())
-        && !containsPort(ship.getArrivalPort())) {
-            shipList.add(ship);
+        else if((getEndPort().equalsIgnoreCase(ship.getDepartPort())) && // Check if the arrival port of last ship is the same as the passed-in ship's departure port.
+                (getEndDate().after(ship.getDepartDate()) || getEndDate().equals(ship.getDepartDate())) && // Check if last ship arrival date is before/on same day as passed-in ship depart date.
+                (!containsPort(ship.getArrivalPort()))) { // If the parameters arrival port is not within the journey (Prevents closed paths)...
+            shipList.add(ship); // Adds the passed-in ship to shiplist.
             return true;
-        }
-        else {
+        } else {
             return false;
         }
-
     }
 
 
@@ -209,16 +209,27 @@ public class CruiseJourney {
      * */
     @Override
     public String toString() {
-        String stringBuilder = "Total Cost: $" + getTotalCost() +"!!!";
+        String s = "Total Cost: $" + getTotalCost() +"!!!";
 
-        for (Iterator<CruiseShip> iterator = shipList.iterator(); iterator.hasNext();){
-            CruiseShip next = iterator.next();
-            stringBuilder += "\n"+ next.getBoatName() + ": "+
-                    "LEAVING " + next.getDepartPort() + " " + next.getDepartDate() +
-                    " and ARRIVING " + next.getArrivalPort() + " " + next.getArrivalDate() +
-                    " $" + next.getCost();
+        for (int i = 0; i < shipList.size(); i++) {
+            fmt.setCalendar(shipList.get(i).getDepartDate());
+            String departFormatted = fmt.format(shipList.get(i).getDepartDate().getTime());
+            fmt.setCalendar(shipList.get(i).getArrivalDate() );
+            String arrivalFormatted = fmt.format(shipList.get(i).getArrivalDate().getTime());
+            s += "\n>>>>> BOAT :"+shipList.get(i).getBoatName()+" COST : $"+shipList.get(i).getCost()+" <<<<<< "+
+                    "\nLEAVING "+shipList.get(i).getDepartPort()+" AT "+departFormatted+
+                    "\nARRIVING :"+shipList.get(i).getArrivalPort() +" AT "+arrivalFormatted;
         }
 
-        return stringBuilder;
+
+//        for (Iterator<CruiseShip> iterator = shipList.iterator(); iterator.hasNext();){
+//            CruiseShip next = iterator.next();
+//            stringBuilder += "\n"+ next.getBoatName() + ": "+
+//                    "LEAVING " + next.getDepartPort() + " " + next.getDepartDate() +
+//                    " and ARRIVING " + next.getArrivalPort() + " " + next.getArrivalDate() +
+//                    " $" + next.getCost();
+//        }
+
+        return s;
     }
 }
