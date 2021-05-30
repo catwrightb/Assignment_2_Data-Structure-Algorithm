@@ -13,7 +13,6 @@ import java.util.List;
 public class CruiseJourney {
     private List<CruiseShip> shipList;
     private final SimpleDateFormat fmt = new SimpleDateFormat("dd-MMM");
-    private String startPort;
 
    /**
     * default constructor creating a journey with no initial trips
@@ -56,17 +55,17 @@ public class CruiseJourney {
      *
      */
     public boolean addCruise(CruiseShip ship){
-        //empty
-        if (getEndPort() == null){
+        if (getEndPort() == null){ //empty
             shipList.add(ship);
             return true;
         }
-        else if((getEndPort().equalsIgnoreCase(ship.getDepartPort())) && // Check if the arrival port of last ship is the same as the passed-in ship's departure port.
-                (getEndDate().before(ship.getDepartDate()) || getEndDate().equals(ship.getDepartDate())) && // Check if last ship arrival date is before/on same day as passed-in ship depart date.
-                (!containsPort(ship.getArrivalPort()))) { // If the parameters arrival port is not within the journey (Prevents closed paths)...
-            shipList.add(ship); // Adds the passed-in ship to shiplist.
+        else if((getEndPort().equalsIgnoreCase(ship.getDepartPort())) &&
+                (getEndDate().before(ship.getDepartDate()) || getEndDate().equals(ship.getDepartDate())) &&
+                (!containsPort(ship.getArrivalPort()))) {
+            shipList.add(ship);
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
@@ -222,8 +221,6 @@ public class CruiseJourney {
                     ") and ARRIVING "+shipList.get(i).getArrivalPort() +" ("+arrivalFormatted +")"
                     + " (Cost: $"+shipList.get(i).getCost()+")";
         }
-
-
 
         return s;
     }
