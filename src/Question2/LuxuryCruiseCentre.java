@@ -61,34 +61,45 @@ public class LuxuryCruiseCentre {
     private void findPaths(String departPort, Calendar departDate, String endPoint, CruiseJourney currentJourney,
                            List<CruiseJourney>journeyList){
 
+
         if (departPort.equals(endPoint)){
             CruiseJourney clone = currentJourney.cloneJourney();
             journeyList.add(clone);
-        }
-        else if (departPort.equalsIgnoreCase("Antarctica")){
-            currentJourney.removeLastTrip();
+
         }
         else {
             Set<CruiseShip> set = portMap.get(departPort);
             CruiseShip next;
 
-
-            for (Iterator iterator = set.iterator(); iterator.hasNext();){
+            for (Iterator iterator = set.iterator(); iterator.hasNext(); ) {
                 next = (CruiseShip) iterator.next();
 
-                if (next.getDepartDate().after(departDate) || next.getDepartDate().equals(departDate)){
-                    if (currentJourney.addCruise(next))
+                if (!endPoint.equalsIgnoreCase("Antarctica")) {
+                    if (!next.getArrivalPort().equalsIgnoreCase("Antarctica")) {
+                        if (next.getDepartDate().after(departDate) || next.getDepartDate().equals(departDate)) {
+                            if (currentJourney.addCruise(next))
+                            {
+                                findPaths(next.getArrivalPort(), next.getArrivalDate(), endPoint, currentJourney, journeyList);
+                                currentJourney.removeLastTrip();
+
+                            }
+                        }
+                    }
+                }
+                else {
+                    if (next.getDepartDate().after(departDate) || next.getDepartDate().equals(departDate)) {
+                        if (currentJourney.addCruise(next))
                         {
                             findPaths(next.getArrivalPort(), next.getArrivalDate(), endPoint, currentJourney, journeyList);
                             currentJourney.removeLastTrip();
+
                         }
 
                     }
                 }
-
-
             }
 
+            }
         }
 
 }

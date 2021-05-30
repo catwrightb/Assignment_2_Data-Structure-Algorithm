@@ -11,15 +11,19 @@ import java.util.List;
  */
 public class LuxuryCruiseTestClass {
 
+    public static String startPoint = "Auckland";
+    public static String endPoint = "Bangkok";
+
+
     public static void main(String[] args)
     {   System.out.println("------ LUXURY CRUISES -----");
         LuxuryCruiseCentre centre = new LuxuryCruiseCentre();
         buildGraph(centre);
 
-        List<CruiseJourney> options = centre.getPossibleJourneys("Auckland", new GregorianCalendar(2020, Calendar.JUNE,1), "Bangkok");
-        System.out.println(">>>  There are "+options.size()+" possible journeys ");
+        List<CruiseJourney> options = centre.getPossibleJourneys(startPoint, new GregorianCalendar(2020, Calendar.JUNE,1), endPoint);
+        System.out.println(">>>  There are "+options.size()+" possible journeys from " + startPoint + " to " +endPoint + " in your date range.");
         for(int i=0;i<options.size();i++)
-        {   System.out.println("-------------------OPTION "+(i+1)+"--------------------------");
+        {   System.out.println("\n-------------------OPTION "+(i+1)+"--------------------------");
             System.out.println(options.get(i));
         }
     }
