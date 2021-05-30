@@ -16,7 +16,7 @@ public class LuxuryCruiseTestClass {
         LuxuryCruiseCentre centre = new LuxuryCruiseCentre();
         buildGraph(centre);
 
-        List<CruiseJourney> options = centre.getPossibleJourneys("Auckland", new GregorianCalendar(2020, Calendar.JUNE,10), "Melbourne");
+        List<CruiseJourney> options = centre.getPossibleJourneys("Auckland", new GregorianCalendar(2020, Calendar.JUNE,1), "Bangkok");
         System.out.println(">>>  There are "+options.size()+" possible journeys ");
         for(int i=0;i<options.size();i++)
         {   System.out.println("-------------------OPTION "+(i+1)+"--------------------------");
@@ -167,6 +167,7 @@ public class LuxuryCruiseTestClass {
 
         centre.add(new CruiseShip("Cheap As Chips Adventures", "Vanuatu", new GregorianCalendar(2020, Calendar.JUNE, 20),
                 "Bangkok", new GregorianCalendar(2020, Calendar.JUNE, 30), 749));
+
     }
 
 }

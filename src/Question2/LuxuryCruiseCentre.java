@@ -65,21 +65,25 @@ public class LuxuryCruiseCentre {
             CruiseJourney clone = currentJourney.cloneJourney();
             journeyList.add(clone);
         }
+        else if (departPort.equalsIgnoreCase("Antarctica")){
+            currentJourney.removeLastTrip();
+        }
         else {
-            Set set = portMap.get(departPort);
+            Set<CruiseShip> set = portMap.get(departPort);
             CruiseShip next;
+
 
             for (Iterator iterator = set.iterator(); iterator.hasNext();){
                 next = (CruiseShip) iterator.next();
 
                 if (next.getDepartDate().after(departDate) || next.getDepartDate().equals(departDate)){
                     if (currentJourney.addCruise(next))
-                    {
-                        findPaths(next.getArrivalPort(), next.getArrivalDate(), endPoint, currentJourney, journeyList);
-                        currentJourney.removeLastTrip();
-                    }
+                        {
+                            findPaths(next.getArrivalPort(), next.getArrivalDate(), endPoint, currentJourney, journeyList);
+                            currentJourney.removeLastTrip();
+                        }
 
-                }
+                    }
                 }
 
 

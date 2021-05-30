@@ -13,6 +13,7 @@ import java.util.List;
 public class CruiseJourney {
     private List<CruiseShip> shipList;
     private final SimpleDateFormat fmt = new SimpleDateFormat("dd-MMM-yyyy");
+    private String startPort;
 
    /**
     * default constructor creating a journey with no initial trips
@@ -61,7 +62,7 @@ public class CruiseJourney {
             return true;
         }
         else if((getEndPort().equalsIgnoreCase(ship.getDepartPort())) && // Check if the arrival port of last ship is the same as the passed-in ship's departure port.
-                (getEndDate().after(ship.getDepartDate()) || getEndDate().equals(ship.getDepartDate())) && // Check if last ship arrival date is before/on same day as passed-in ship depart date.
+                (getEndDate().before(ship.getDepartDate()) || getEndDate().equals(ship.getDepartDate())) && // Check if last ship arrival date is before/on same day as passed-in ship depart date.
                 (!containsPort(ship.getArrivalPort()))) { // If the parameters arrival port is not within the journey (Prevents closed paths)...
             shipList.add(ship); // Adds the passed-in ship to shiplist.
             return true;
@@ -193,7 +194,7 @@ public class CruiseJourney {
 
             for (Iterator<CruiseShip> iterator = shipList.iterator(); iterator.hasNext();){
                 CruiseShip next = iterator.next();
-                cost =+ next.getCost();
+                cost += next.getCost();
             }
             return cost;
         }
