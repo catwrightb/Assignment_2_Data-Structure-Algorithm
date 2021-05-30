@@ -43,6 +43,15 @@ public class LuxuryCruiseCentre {
         //cruise object to pass to findPaths
         CruiseJourney cruiseJourney = new CruiseJourney();
 
+        if (!portMap.containsKey(startPoint) ){
+            System.out.println("Starting Port does not exist");
+            return cruiseJourneyList;
+        }
+        else if (!portMap.containsKey(endPoint)){
+            System.out.println("Ending Port does not exist");
+            return cruiseJourneyList;
+        }
+
         //recursive call to find paths
         findPaths(startPoint, startDate, endPoint, cruiseJourney, cruiseJourneyList);
 
@@ -60,22 +69,32 @@ public class LuxuryCruiseCentre {
      * */
     private void findPaths(String departPort, Calendar departDate, String endPoint, CruiseJourney currentJourney,
                            List<CruiseJourney>journeyList){
+        try {
+            if (departPort.equals(endPoint)){
+                CruiseJourney clone = currentJourney.cloneJourney();
+                journeyList.add(clone);
 
+            }
+            else {
+                Set<CruiseShip> set = portMap.get(departPort);
+                CruiseShip next;
 
-        if (departPort.equals(endPoint)){
-            CruiseJourney clone = currentJourney.cloneJourney();
-            journeyList.add(clone);
+                for (Iterator iterator = set.iterator(); iterator.hasNext(); ) {
+                    next = (CruiseShip) iterator.next();
 
-        }
-        else {
-            Set<CruiseShip> set = portMap.get(departPort);
-            CruiseShip next;
+                    if (!endPoint.equalsIgnoreCase("Antarctica")) {
+                        if (!next.getArrivalPort().equalsIgnoreCase("Antarctica")) {
+                            if (next.getDepartDate().after(departDate) || next.getDepartDate().equals(departDate)) {
+                                if (currentJourney.addCruise(next))
+                                {
+                                    findPaths(next.getArrivalPort(), next.getArrivalDate(), endPoint, currentJourney, journeyList);
+                                    currentJourney.removeLastTrip();
 
-            for (Iterator iterator = set.iterator(); iterator.hasNext(); ) {
-                next = (CruiseShip) iterator.next();
-
-                if (!endPoint.equalsIgnoreCase("Antarctica")) {
-                    if (!next.getArrivalPort().equalsIgnoreCase("Antarctica")) {
+                                }
+                            }
+                        }
+                    }
+                    else { //if endport is Antarctica
                         if (next.getDepartDate().after(departDate) || next.getDepartDate().equals(departDate)) {
                             if (currentJourney.addCruise(next))
                             {
@@ -83,23 +102,18 @@ public class LuxuryCruiseCentre {
                                 currentJourney.removeLastTrip();
 
                             }
+
                         }
                     }
                 }
-                else {
-                    if (next.getDepartDate().after(departDate) || next.getDepartDate().equals(departDate)) {
-                        if (currentJourney.addCruise(next))
-                        {
-                            findPaths(next.getArrivalPort(), next.getArrivalDate(), endPoint, currentJourney, journeyList);
-                            currentJourney.removeLastTrip();
-
-                        }
-
-                    }
-                }
-            }
 
             }
+        } catch (Exception e) {
+            System.out.println("No return cruises from your destination");
+        }
+
+
+
         }
 
 }
