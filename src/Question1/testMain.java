@@ -33,8 +33,5 @@ public class testMain {
         System.out.println(map2.keySet());
         System.out.println(map2.values());
 
-
-
-
     }
 }

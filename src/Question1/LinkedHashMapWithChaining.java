@@ -14,6 +14,7 @@ public class LinkedHashMapWithChaining<K,V> implements Map<K,V> {
     Node<K,V> head;
     Node<K,V> tail;
 
+    //inner node class
     static class Node<K,V>{
         K key;
         V value;
@@ -36,16 +37,26 @@ public class LinkedHashMapWithChaining<K,V> implements Map<K,V> {
         this.size =0;
     }
 
+    /*
+    * returns the amount of key-value pairs in the maps
+     * */
     @Override
     public int size() {
         return size;
     }
 
+    /*
+    *  returns true if no key-values are stored in the map
+     * */
     @Override
     public boolean isEmpty() {
         return size == 0;
     }
 
+
+    /*
+    * used to check whether the map has an entry for that key
+     * */
     @Override
     public boolean containsKey(Object key) {
         int index = hashCode(key);
@@ -66,6 +77,9 @@ public class LinkedHashMapWithChaining<K,V> implements Map<K,V> {
         }
     }
 
+    /*
+    * used to check whether the map holds that value
+     * */
     @Override
     public boolean containsValue(Object value) {
         Node<K,V> currentNode = head;
@@ -84,6 +98,9 @@ public class LinkedHashMapWithChaining<K,V> implements Map<K,V> {
         return false;
     }
 
+    /*
+    * used to return the value mapped to the key parameter
+     * */
     @Override
     public V get(Object key) {
         Node<K,V> target = find(key);
@@ -110,6 +127,9 @@ public class LinkedHashMapWithChaining<K,V> implements Map<K,V> {
         return targetNode;
     }
 
+    /*
+    * stores the key and value parameters in the map
+     * */
     @Override
     public V put(K key, V value) {
         int position = hashCode(key);
@@ -158,6 +178,9 @@ public class LinkedHashMapWithChaining<K,V> implements Map<K,V> {
 
     }
 
+    /*
+    * uses the parameter key to remove the key-value pair from the map
+     * */
     @Override
     public V remove(Object key) {
         int position = hashCode(key);
@@ -207,17 +230,26 @@ public class LinkedHashMapWithChaining<K,V> implements Map<K,V> {
 
     }
 
+    /*
+    * adds all key-values from parameter map to “this” map
+     * */
     @Override
     public void putAll(Map<? extends K, ? extends V> m) {
 
     }
 
+    /*
+    * clears the map removing all key-value pairs
+     * */
     @Override
     public void clear() {
         size = 0;
         this.hashTable = new Node[capacity];
     }
 
+    /*
+    * used to get a set of all the keys used in map
+     * */
     @Override
     public Set<K> keySet() {
         Node<K,V> node = head;
@@ -230,6 +262,9 @@ public class LinkedHashMapWithChaining<K,V> implements Map<K,V> {
         return list;
     }
 
+    /*
+    * returns a collection of values held inside map
+    * */
     @Override
     public Collection<V> values() {
         Node<K,V> node = head;
@@ -242,20 +277,20 @@ public class LinkedHashMapWithChaining<K,V> implements Map<K,V> {
         return list;
     }
 
+    /*
+    *  used to return a set all key-value pairs
+     * */
     @Override
     public Set<Entry<K,V>> entrySet() {
-//        Set<K> set = keySet();
-//
-//
-//
-//        Node<K,V> node = head;
-//
-//        while(node !=null){
-//           // set.add((Entry<K, V>) node.value);
-//            node = node.after;
-//        }
-//
-//        return list;
+        Set<K> set = keySet();
+
+        Entry<K,V> node = (Entry<K, V>) head;
+
+        while(node !=null){
+           // set.add((Entry<K, V>) node.value);
+            set.add((K) node);
+        }
+
         return null;
     }
 
@@ -264,6 +299,9 @@ public class LinkedHashMapWithChaining<K,V> implements Map<K,V> {
         return Math.abs(key.hashCode()) % capacity;
     }
 
+    /*
+    * expands capacity of hashMap
+    * */
     public void expandCapacity(){
         Node<K,V>[] oldTable = hashTable;
 
