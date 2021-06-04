@@ -29,7 +29,6 @@ public class LuxuryCruiseCentre {
 
     }
 
-    //"Auckland", new GregorianCalendar(2020, Calendar.JUNE,1), "Vanuatu"
     /**
      *  getPossibleJourneys method is used to return list of all
      *  the uniquely possible routes from the start port and date

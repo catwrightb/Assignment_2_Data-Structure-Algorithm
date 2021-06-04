@@ -3,6 +3,8 @@ package Question1;
 public class testMain {
 
     public static void main(String[] args) {
+        //main to test the function of LinkedHashMap with Chaining
+
         LinkedHashMapWithChaining<String,String> map = new LinkedHashMapWithChaining<String,String>();
         map.put("one","ONE");
         map.put("two","TWO");

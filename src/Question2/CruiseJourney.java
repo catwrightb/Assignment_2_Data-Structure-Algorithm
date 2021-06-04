@@ -8,7 +8,8 @@ import java.util.List;
 
 /* CruiseJourney  represents a journey
     comprised of one or more CruiseShip
-    objects between multiple ports*/
+    objects between multiple ports
+    */
 
 public class CruiseJourney {
     private List<CruiseShip> shipList;

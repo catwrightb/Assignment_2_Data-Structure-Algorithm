@@ -32,6 +32,9 @@ public class LinkedHashMapWithChaining<K,V> implements Map<K,V> {
         }
     }
 
+    /*
+    * linkedHashmap constructor
+    * */
     public LinkedHashMapWithChaining(){
         this.hashTable = new Node[capacity];
         this.size =0;
