@@ -1,4 +1,4 @@
-# Assignment_2_Data-Structure-Algorithm
+# Maps and Graph Algorithms Fun
 
 This repository is based on an assignment for Data Structure and Algorithms.
 
